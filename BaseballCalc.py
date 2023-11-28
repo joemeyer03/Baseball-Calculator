@@ -7,8 +7,23 @@ from statistics import NormalDist
 avg_wins_of_playoff_team = 94.82
 stdev_of_wins_of_playoff_team = 6.76
 
+### Takes a teams runs scored and their runs allowed and calculates what their
+### win percentage should be based off Bill James pythagorean win percentage
 def pythag_wins(runs_scored, runs_allowed) -> float:
     return 1 / (1 + (runs_allowed / runs_scored)**2)
+
+### Takes two teams winning percentage and returns the probability that A beats B
+def head_to_head_percent(win_percent_of_A, win_percent_of_B):
+    numerator = win_percent_of_A - win_percent_of_A * win_percent_of_B
+    denominator = win_percent_of_A + win_percent_of_B - 2 * win_percent_of_A * win_percent_of_B
+    return  numerator / denominator
+
+### Takes two teams win totals and returns the probability that A beats B
+def head_to_head_wins_losses(A_wins, B_wins):
+    A_losses = 162 - A_wins
+    B_losses = 162 - B_wins
+
+    return (A_wins * B_losses) / (A_wins * B_losses + B_wins * A_losses)
 
 def make_playoffs() -> None:
     print("Would you rather: \
@@ -52,8 +67,33 @@ def runs_playoffs() -> None:
 def lucky() -> None:
     pass
 
-def playoff_predictor() -> None:
+def who_wins() -> None:
     pass
+
+def pitch_v_hitter() -> None:
+    pass
+
+def playoff_predictor() -> None:
+    inp_help = ["first", "second", "third", "fourth", "fifth", "sixth"]
+
+    american = dict()
+    national = dict()
+
+    print(head_to_head_percent(.767, .361))
+    print(head_to_head_wins_losses(.767*162, .361*162))
+
+    playoffs = list()
+
+    for i in inp_help:
+        name = input("Enter name of " + i + " place American League team: ")
+        wins = input("Enter win total of " + name + ": ")
+        american[name] = wins
+    for i in inp_help:
+        name = input("Enter name of " + i + " place National League team: ")
+        wins = input("Enter win total of " + name + ": ")
+        national[name] = wins
+
+    
 
 def help():
     print("\nCommands:")
@@ -72,6 +112,8 @@ command_blueprints = {
     make_playoffs : ["Should my team make the playoffs?","1"],
     runs_playoffs : ["How many runs does my team need to make the playoffs?","2"],
     lucky : ["Is my team lucky?","3"],
+    who_wins : ["Is my team going to win this game?"],
+    pitch_v_hitter : ["Who wins between a pitcher and batter?"],
     playoff_predictor : ["Playoff Predictor","4"],
 }
 commands = {}
